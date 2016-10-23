@@ -1,0 +1,17 @@
+Principal Components Regression
+Best number of components
+[1] 10
+Summary of pcr model
+Data: 	X dimension: 400 11 
+	Y dimension: 400 1
+Fit method: svdpc
+Number of components considered: 10
+TRAINING: % variance explained
+         1 comps  2 comps  3 comps  4 comps  5 comps  6 comps
+X          25.07    35.86    46.20    55.48    64.68    73.50
+Balance    58.03    58.98    60.98    62.38    62.39    65.39
+         7 comps  8 comps  9 comps  10 comps
+X          82.12    90.28    97.60     99.98
+Balance    67.43    68.67    68.73     95.47
+Test MSE
+[1] 0.05817382
