@@ -19,8 +19,9 @@ y_testing <- testing_set$Balance
 
 # Cross validation
 set.seed(1)
-ridge_cv_out <- cv.glmnet(x_trainning, y_trainning, alpha=0, intercept = FALSE,
-                    standardize = FALSE)
+grid <- 10^seq(10, -2, length = 100)
+ridge_cv_out <- cv.glmnet(x_trainning, y_trainning, alpha=0, lambda = grid,
+                          intercept = FALSE, standardize = FALSE)
 
 
 # Select the best model
@@ -36,7 +37,7 @@ ridge_pred <- predict(ridge_cv_out, s = ridge_bestlam, newx = x_testing)
 ridge_MSE <- mean((ridge_pred - y_testing)^2)
 
 # Refit the model
-out <- glmnet(x, y, alpha = 0, intercept = FALSE, standardize = FALSE)
+out <- glmnet(x, y, alpha = 0, lambda = grid, intercept = FALSE, standardize = FALSE)
 ridge_coef <- predict(out, s = ridge_bestlam, type="coefficients")[1:12,]
 
 # Save output
