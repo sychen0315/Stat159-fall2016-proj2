@@ -7,5 +7,20 @@ testing_set <- read.csv("../../data/testing_set.csv", sep = ",", row.names = 1)
 
 # OLS
 ols_reg <- lm(Balance ~ . , data = training_set)
-
 ols_reg_sum <- summary(ols_reg)
+
+# Save result
+save(ols_reg, file = "../../data/OLS-regression.RData")
+
+# Plots
+png(file = "../../images/OLS-images/residual-plot.png")
+plot(ols_reg, which = 1)
+dev.off()
+
+png(file = "../../images/OLS-images/normal-qq-plot.png")
+plot(ols_reg, which = 2)
+dev.off()
+
+png(file = "../../images/OLS-images/scale-location-plot.png")
+plot(ols_reg, which = 3)
+dev.off()
