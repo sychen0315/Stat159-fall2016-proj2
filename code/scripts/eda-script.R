@@ -34,7 +34,7 @@ for (i in c(seq(1,6), 11)) {
 rownames(sum) <- c(colnames(credit_df)[1:6], colnames(credit_df)[11])
 
 # Save summary results
-sink(file = "../../data/eda-quantitative-summary.txt")
+sink(file = "../../data/eda/eda-quantitative-summary.txt")
 writeLines("Summary Statistics")
 sum
 sink()
@@ -53,7 +53,7 @@ eda_barplot(credit_df$Married, "Barplot of Married", "../../images/eda-images/ba
 eda_barplot(credit_df$Ethnicity, "Barplot of Ethnicity", "../../images/eda-images/barplot-ethnicity.png")
 
 # Save frequency results
-sink(file = "../../data/eda-qualitative-freq.txt")
+sink(file = "../../data/eda/eda-qualitative-freq.txt")
 writeLines("Gender frequency")
 gender_freq
 writeLines(" ")
@@ -74,12 +74,12 @@ quant_df[7] <- credit_df[11]
 matrix_cor <- cor(quant_df)
 
 # Save matrix of correlations
-sink(file = "../../data/eda-matrix-cor.txt")
+sink(file = "../../data/eda/eda-matrix-cor.txt")
 writeLines("Matrix correlation")
 matrix_cor
 sink()
 
-save(matrix_cor, file = "../../data/correlation-matrix.RData")
+save(matrix_cor, file = "../../data/eda/correlation-matrix.RData")
 
 # Scatterplot matrix
 png("../../images/eda-images/scatterplot-matrix.png")
@@ -94,7 +94,7 @@ summary(aov_qualitative)
 options(op)  # reset to previous
 
 # Save anova object
-save(aov_qualitative, file = "../../data/eda-qualitative-anova.RData")
+save(aov_qualitative, file = "../../data/eda/eda-qualitative-anova.RData")
 
 
 # conditional boxplots between Balance and the qualitative variables

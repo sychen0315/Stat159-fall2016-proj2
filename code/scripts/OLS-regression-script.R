@@ -10,7 +10,12 @@ ols_reg <- lm(Balance ~ . , data = training_set)
 ols_reg_sum <- summary(ols_reg)
 
 # Save result
-save(ols_reg, file = "../../data/OLS-regression.RData")
+save(ols_reg, file = "../../data/OLS-regression/OLS-regression.RData")
+
+sink(file = "../../data/OLS-regression/OLS-output.txt")
+writeLines("Ordinary Least Squares Summary")
+ols_reg_sum
+sink()
 
 # Plots
 png(file = "../../images/OLS-images/residual-plot.png")
