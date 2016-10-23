@@ -1,5 +1,7 @@
 # Load functions
 source("../functions/eda-functions.R")
+   
+
 
 # Read data
 credit_df <- read.csv("../../data/Credit.csv", sep = ",", row.names = 1)
