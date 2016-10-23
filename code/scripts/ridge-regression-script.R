@@ -41,9 +41,10 @@ out <- glmnet(x, y, alpha = 0, lambda = grid, intercept = FALSE, standardize = F
 ridge_coef <- predict(out, s = ridge_bestlam, type="coefficients")[1:12,]
 
 # Save output
-save(ridge_cv_out, ridge_bestlam, ridge_MSE, ridge_coef, file = "../../data/ridge-regression.RData")
+save(ridge_cv_out, ridge_bestlam, ridge_MSE, ridge_coef, 
+     file = "../../data/ridge-regression/ridge-regression.RData")
 
-sink(file = "../../data/ridge-output.txt")
+sink(file = "../../data/ridge-regression/ridge-output.txt")
 writeLines("Ridge Regression")
 writeLines("Best Lambda")
 ridge_bestlam
@@ -51,5 +52,4 @@ writeLines("Official coefficients")
 ridge_coef
 writeLines("Test MSE")
 ridge_MSE
-writeLines(" ")
 sink()

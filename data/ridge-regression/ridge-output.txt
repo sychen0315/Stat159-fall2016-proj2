@@ -10,4 +10,3 @@ Official coefficients
  0.013519577  0.001689846 
 Test MSE
 [1] 0.05740657
- 
