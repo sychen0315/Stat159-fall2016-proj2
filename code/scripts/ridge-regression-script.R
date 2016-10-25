@@ -42,9 +42,9 @@ ridge_coef <- predict(out, s = ridge_bestlam, type="coefficients")[1:12,]
 
 # Save output
 save(ridge_cv_out, ridge_bestlam, ridge_MSE, ridge_coef, 
-     file = "../../data/ridge-regression/ridge-regression.RData")
+     file = "../../data/ridge/ridge-regression.RData")
 
-sink(file = "../../data/ridge-regression/ridge-output.txt")
+sink(file = "../../data/ridge/ridge-output.txt")
 writeLines("Ridge Regression")
 writeLines("Best Lambda")
 ridge_bestlam
