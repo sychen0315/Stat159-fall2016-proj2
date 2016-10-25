@@ -38,9 +38,9 @@ out <- glmnet(x, y, alpha = 1, intercept = FALSE, standardize = FALSE)
 lasso_coef <- predict(out, s = lasso_bestlam, type="coefficients")[1:12,]
 
 # Save output
-save(lasso_cv_out, lasso_bestlam, lasso_MSE, lasso_coef, file = "../../data/lasso-regression.RData")
+save(lasso_cv_out, lasso_bestlam, lasso_MSE, lasso_coef, file = "../../data/lasso/lasso-regression.RData")
 
-sink(file = "../../data/lasso-output.txt")
+sink(file = "../../data/lasso/lasso-output.txt")
 writeLines("Lasso Regression")
 writeLines("Best Lambda")
 lasso_bestlam
