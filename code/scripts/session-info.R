@@ -1,5 +1,6 @@
 # Print session information
 library(devtools)
+library(knitr)
 library(stats)
 library(rstudioapi)
 library(Matrix)

@@ -2,11 +2,11 @@ Ridge Regression
 Best Lambda
 [1] 0.01
 Official coefficients
- (Intercept)       Income        Limit       Rating        Cards 
- 0.000000000 -0.568022227  0.702822359  0.608209419  0.043630510 
-         Age    Education      Gender1     Student1     Married1 
--0.025442438 -0.005792766 -0.010665427  0.273068757 -0.011162306 
-  Ethnicity1   Ethnicity2 
- 0.013519577  0.001689846 
+       (Intercept)             Income              Limit             Rating 
+       0.000000000       -0.568025244        0.702840319        0.608187503 
+             Cards                Age          Education       GenderFemale 
+       0.043631757       -0.025450923       -0.005796086       -0.010663102 
+        StudentYes         MarriedYes     EthnicityAsian EthnicityCaucasian 
+       0.273070117       -0.011144393        0.016445754        0.011027097 
 Test MSE
-[1] 0.05740657
+[1] 0.05741087

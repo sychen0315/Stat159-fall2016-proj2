@@ -11,15 +11,15 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] ggplot2_2.1.0   xtable_1.8-2    rmarkdown_1.0   pls_2.5-0      
-[5] glmnet_2.0-5    foreach_1.4.3   Matrix_1.2-7.1  rstudioapi_0.6 
-[9] devtools_1.12.0
+ [1] ggplot2_2.1.0   xtable_1.8-2    rmarkdown_1.0   pls_2.5-0      
+ [5] glmnet_2.0-5    foreach_1.4.3   Matrix_1.2-7.1  rstudioapi_0.6 
+ [9] knitr_1.14      devtools_1.12.0
 
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.7      lattice_0.20-34  codetools_0.2-15 digest_0.6.10   
  [5] withr_1.0.2      plyr_1.8.4       grid_3.3.1       gtable_0.2.0    
  [9] magrittr_1.5     scales_0.4.0     evaluate_0.9     stringi_1.1.2   
-[13] tools_3.3.1      iterators_1.0.8  stringr_1.1.0    munsell_0.4.3   
+[13] iterators_1.0.8  tools_3.3.1      stringr_1.1.0    munsell_0.4.3   
 [17] colorspace_1.2-7 memoise_1.0.0    htmltools_0.3.5  methods_3.3.1   
  setting  value                       
  version  R version 3.3.1 (2016-06-21)
@@ -28,7 +28,7 @@ loaded via a namespace (and not attached):
  language (EN)                        
  collate  en_US.UTF-8                 
  tz       America/Los_Angeles         
- date     2016-10-23                  
+ date     2016-11-03                  
 
  package    * version date       source        
  codetools    0.2-15  2016-10-05 CRAN (R 3.3.1)
@@ -42,6 +42,7 @@ loaded via a namespace (and not attached):
  gtable       0.2.0   2016-02-26 CRAN (R 3.3.1)
  htmltools    0.3.5   2016-03-21 CRAN (R 3.3.1)
  iterators    1.0.8   2015-10-13 CRAN (R 3.3.1)
+ knitr      * 1.14    2016-08-13 CRAN (R 3.3.1)
  lattice      0.20-34 2016-09-06 CRAN (R 3.3.1)
  magrittr     1.5     2014-11-22 CRAN (R 3.3.1)
  Matrix     * 1.2-7.1 2016-09-01 CRAN (R 3.3.1)

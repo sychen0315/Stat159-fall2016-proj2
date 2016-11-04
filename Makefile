@@ -1,43 +1,70 @@
 # Variables
 credit = data/Credit.csv
-eda_figs = $(wildcard images/eda-images/* .png)
-eda_freq = data/eda/eda-qualitative-freq.txt
-eda_summary = data/eda/eda-quantitative-summary.txt
-cor_data = data/eda/correlation-matrix.RData
-cor = data/eda/eda-matrix-cor.txt
-aov = data/eda/eda-qualitative-anova.RData
+training = data/training-set.csv
+testing = data/testing-set.csv
+scaled_credit = data/scaled-credit.csv
 
+eda_script = code/scripts/eda-script.R 
+eda_function = code/functions/eda-functions.R
+pdmp_script = code/scripts/pmdp-script.R
+tts_script = code/scripts/tts-script.R
+ols_script = code/scripts/OLS-regression-script.R
+ridge_script = code/scripts/ridge-regression-script.R 
+lasso_script = code/scripts/lasso-regression-script.R
+pcr_script = code/scripts/pcr-script.R
+pls_script = code/scripts/pls-script.R
 
-
-
-.PHONY: eda data ols session all 
+.PHONY: eda data pmdp tts ols ridge lasso pls pcr session regressions all tests clean
 
 # Default targets
-all: eda ols 
+all: eda pmdp tts regressions tests
 
-# Eda traget
-eda: $(eda_figs) $(cor) $(cor_data) $(eda_summary) $(eda_freq) $(aov) 
+# Eda traget: Run eda script to calculate summary statistics
+eda: $(eda_script) $(eda_function) $(credit)
+	Rscript $<
 
-$(cor): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript eda-script.R 
-	
-$(cor_data): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript eda-script.R 
+# Pmdp target: Run pmdp scripts to get scaled credit data
+pdmp: $(pdmp_script) $(credit)
+	Rscript $<
 
-$(eda_summary): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript eda-script.R 
+# tts target: Run tts scripts to get training and testing sets
+tts: $(tts_script) $(scaled_credit)
+	Rscript $<
 
-$(eda_freq): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript eda-script.R 
+# Ols target: Fit ols regression 
+ols: $(ols_script) $(training) $(testing)
+	Rscript $<
 
-$(aov): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript eda-script.R
 
-$(eda_figs): code/scripts/eda-script.R code/functions/eda-functions.R $(credit)
-	cd code/scripts && Rscript -e eda-script.R 
+# ridge target: Fit ridge regression 
+ridge: $(ridge_script) $(training) $(testing) $(scaled_credit)
+	Rscript $<
+	#cd code/scripts && Rscript ridge-regression-script.R 
 
-# OLS target
- 
+# lasso target: Fit lasso regression 
+lasso: $(lasso_script) $(training) $(testing) $(scaled_credit)
+	Rscript $<
+
+# pcr target: Fit pcr regression 
+pcr: $(pcr_script) $(training) $(testing) $(scaled_credit)
+	Rscript $<
+
+# pls target: Fit pls regression
+pls: $(pls_script) $(scaled_credit) $(training) $(testing)
+	Rscript $<
+
+
+# regressions target: Run all 5 regressions
+regressions: 
+	make ols
+	make ridge
+	make lasso
+	make pcr
+	make pls
+
+# Tests target: Run unit test for eda-functions.R
+tests: code/test-that.R code/tests/test-eda-function.R
+	Rscript $<
 
 # Data target
 data: 
@@ -45,5 +72,8 @@ data:
 
 # Session target
 session:
-	cd code/scripts && Rscript session-info-script.R
+	bash session.sh
 
+# Clean target: Delete report.pdf
+clean:
+	rm -f report/report.pdf
