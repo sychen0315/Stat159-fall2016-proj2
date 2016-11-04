@@ -1,0 +1,7 @@
+# Introduction
+
+In this project, we will utilize the model selection method used in Chapter 6, Linear Model Selection and Regularization, from the book "An Introduction to Statistical Learning" by Gareth James, Deniela Witten, Trevor Hastie and Robert Tibshirani.
+
+The following five models will be applied to our dataset: Ordinary Least Squares, Ridge regression, Lasso regression, Principal Components regression and Partial Least Squares regression.
+
+We will first split the data into training set and test set by 3:1 ratio. For each regression method, we then use a 10-fold cross validation in the training set trying to find "best" model by selecting the one with minimum cross validation errors. Once we get the model with optimal hyper-parameters for each regression method, we will apply them to test set and compare their MSE. Finally we will refit the best model on the full dataset and get our final parameter estimate.
