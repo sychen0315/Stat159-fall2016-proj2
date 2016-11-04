@@ -1,4 +1,4 @@
-# Ridge Regression Models
+# Principal Components regression.
 library(pls)
 
 # Read Data
