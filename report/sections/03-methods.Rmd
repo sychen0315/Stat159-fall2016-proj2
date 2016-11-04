@@ -1,0 +1,24 @@
+
+# Methods
+
+In this section, we will introduce the five linear regression method we use.
+
+## Ordinary Least Squares Regression Method
+
+OLS estimators is the most common regression method. OLS estimators minimizes residual sum of squares: $RSS = \sum_{i=1}^n(y_i - \beta_0 - \sum_{j=1}^p(\beta_{j}x_{ij}))^2$ where $\beta_i$ are coefficient estimates. The OLS estimator is optimal among linear unbiased estimators when the errors are homoscedastic and uncorrelated.
+
+### Ridge Regression
+
+Ridge regression imposes a penalty on the size of coefficients on OLS. Instead of minimizing RSS, Ridge regression minimizes $RSS + \lambda \sum bj^2$. This model solves a regression model where the loss function is the linear least squares function and regularization is given by the l2-norm. $\lambda$ is complexity parameter that controls the amount of shrinkage: the larger the value of $\lambda$, the greater the amount of shrinkage and thus the coefficients become more robust.
+
+### Lasso Regression
+
+Lasso regression estimates sparse coefficients. It contains a l1 prior as regularizer. Lasso method minimize $RSS + \lambda \sum |{\beta_j}|$. Compared to ridge regression, lasso regression has tendency to prefer solutions with fewer parameters values, efficiently reducing the number of variables upon which the solution is dependent.
+
+### Principal Components Regression
+
+Typically, Principal Components Regression considers regresses based on a standard linear regression model, but uses PCA for estimating the unknown regression coefficients in the model. We first perform PCA(privipal components analysis) and then use these components as the regressors to obtain coefficient estimates. PCR performs really well if major pricipal components are more determined in the relationship between x and y than trivial components.
+
+### Partial Least Squares
+
+Instead of finding hyperplanes of maximum variance between y and x in PCR, Partial Least Squares finds a linear regression model by projecting y and x to a new space. It outperforms standard regression when there are more variables than observations. And PLS finds the multidimensional direction in the X space that explains the maximum multidimensional variance direction in the Y space so that it tries to explain both y and x.
