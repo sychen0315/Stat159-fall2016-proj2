@@ -3,7 +3,7 @@
 
 In this section, we will introduce the five linear regression method we use.
 
-## Ordinary Least Squares Regression Method
+### Ordinary Least Squares Regression Method
 
 OLS estimators is the most common regression method. OLS estimators minimizes residual sum of squares: $RSS = \sum_{i=1}^n(y_i - \beta_0 - \sum_{j=1}^p(\beta_{j}x_{ij}))^2$ where $\beta_i$ are coefficient estimates. The OLS estimator is optimal among linear unbiased estimators when the errors are homoscedastic and uncorrelated.
 

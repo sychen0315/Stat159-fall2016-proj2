@@ -1,7 +1,7 @@
 
 # Analysis
 
-## Exploratory Data Analysis (EDA)
+## Exploratory Data Analysis
 
 We first explore our data. We calcluated statistics and summaries for quantitative variables, like income, age, and ratings. We also made histograms and boxplots to get a better idea of how data is distributed. For the qualitative variables like gender, ethnicity, we have the table of frequency for each of them. We also generate barplot to futher illustrate the distribution. Correlation matrix for quantitative variables is calculated as well. To learn the relationship between balance and qualitative variables, we first conduct anova(Analysis of variance), and then make boxplots for each pair of them.
 
@@ -20,3 +20,4 @@ For ridge regression and lasso regression, we use library $glmnet$. For paramete
 For principal components regression and partial least square regression, we use library $pls$, pcr() and plsr(). Cross validation is done by setting regression methods' parameter validation to "CV". We plot validation errors using method validationplot(val.type = "MSEP") and select the best model. Similarly as above, we calculate MSE on test set and refit model to the whole dataset.
 
 Then we compare the models we get from model building process, utilizing the tables, summaries and plots we saved. The result analysis detail is in the next section.
+

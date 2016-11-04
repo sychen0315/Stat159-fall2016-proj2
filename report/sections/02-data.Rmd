@@ -1,3 +1,5 @@
+
+
 # Data
 
 The dataset we use can be found [here](http://www-bcf.usc.edu/~gareth/ISL/Credit.csv).
@@ -5,3 +7,4 @@ The dataset we use can be found [here](http://www-bcf.usc.edu/~gareth/ISL/Credit
 We clean the data by turning categorical variables into dummies, mean centering and standardizing.
 
 We have 400 entries in total and use 3:1 ratio for train-test-split, which gets us a training set with 300 entries and test set with 100 entries.
+
