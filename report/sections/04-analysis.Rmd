@@ -11,14 +11,12 @@ Once we get a rough idea of our original dataset, we decide to process our data 
 
 ## Regression Models
 
-As mentioned in the data section, we have 400 entries in total, and randomly select 300 entries as training set, the rest as test set. We conduct the following process to 5 different methods discussed in methods section. We first use a 10-fold cross validation to look for good hyper-parameters. The function cv.glmnet() for cross validation is provided in library $glmnet$. Then we select the best hyper-parameter set by minimum cv error, and fit it to test set. After we build 5 good models, we compare them on their performance on test set and select the best one. We at last fit the best model we have to the whole dataset.
+As mentioned in the data section, we have 400 entries in total, and randomly select 300 entries as training set, the rest as test set. We conduct the following process to 5 different methods discussed in methods section. We first use a 10-fold cross validation to look for good hyper-parameters. Then we select the best hyper-parameter set by minimum cv error, and fit it to test set to calculate MSE. We also plot the cross-validation errors in terms of the tunning parameter to visualize which parameter gives the "best" model. We at last fit the best model we have to the whole dataset.
 
 For ordinary least squares linear model, we use lm(). The results is set as a standard.
 
-For ridge regression and lasso regression, we use library $glmnet$. For parameters of the regression function, we set alpha to 0 for ridge regression and alpha to 1 for lasso regression. Intercept and standardize are both set to false since data is already mean centered and standardized. We select models by minimum lambda value and calculate mean squared error on test set.
+For ridge regression and lasso regression, we use library $glmnet$. For parameters of the regression function, we set alpha to 0 for ridge regression and alpha to 1 for lasso regression. Intercept and standardize are both set to false since data is already mean centered and standardized. Cross validation is done by using $cv.glmnet()$ function, which performs 10-fold cross validation by default. We select models by minimum lambda value and calculate mean squared error on test set.
 
 For principal components regression and partial least square regression, we use library $pls$, pcr() and plsr(). Cross validation is done by setting regression methods' parameter validation to "CV". We plot validation errors using method validationplot(val.type = "MSEP") and select the best model. Similarly as above, we calculate MSE on test set and refit model to the whole dataset.
 
-Then we compare the models we get from model building process, utilizing the tables, summaries and plots we saved. The analysis detail is in the next section.
-
-
+Then we compare the models we get from model building process, utilizing the tables, summaries and plots we saved. The result analysis detail is in the next section.
