@@ -26,10 +26,11 @@ pcr_MSE <- mean((pcr_pred - testing_set$Balance)^2)
 # Refit the model
 pcr_fit <- pcr(Balance ~ ., data = scaled_credit, ncomp = pcr_bestcomps)
 summary(pcr_fit)
+pcr_coef = coef(pcr_fit)
 
 # Save output
 save(pcr_cv_out, pcr_bestcomps, pcr_MSE,
-     pcr_fit,
+     pcr_fit, pcr_coef,
      file = "data/pcr/pcr.RData")
 
 sink(file = "data/pcr/pcr-output.txt")
