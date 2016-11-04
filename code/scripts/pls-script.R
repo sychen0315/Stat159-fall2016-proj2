@@ -1,4 +1,4 @@
-# Ridge Regression Models
+# Partial Least Squares Regression
 library(pls)
 
 # Read Data
