@@ -1,0 +1,12 @@
+---
+title: "Project 2 Report"
+author: "Shuotong Wu, Siyu Chen"
+date: "11/03/2016"
+output: pdf_document
+header-includes:
+- \usepackage{float}
+---
+
+# Abstract
+
+In this project, we try out different muitiple regression models and find the best approach to fit the data by comparision.
