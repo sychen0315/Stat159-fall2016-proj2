@@ -4,7 +4,7 @@ training = data/training-set.csv
 testing = data/testing-set.csv
 scaled_credit = data/scaled-credit.csv
 
-eda_script = code/scripts/eda-script.R 
+eda_script = code/scripts/eda-script.R
 eda_function = code/functions/eda-functions.R
 pdmp_script = code/scripts/pmdp-script.R
 tts_script = code/scripts/tts-script.R
@@ -31,21 +31,21 @@ pdmp: $(pdmp_script) $(credit)
 tts: $(tts_script) $(scaled_credit)
 	Rscript $<
 
-# Ols target: Fit ols regression 
+# Ols target: Fit ols regression
 ols: $(ols_script) $(training) $(testing)
 	Rscript $<
 
 
-# ridge target: Fit ridge regression 
+# ridge target: Fit ridge regression
 ridge: $(ridge_script) $(training) $(testing) $(scaled_credit)
 	Rscript $<
 	#cd code/scripts && Rscript ridge-regression-script.R 
 
-# lasso target: Fit lasso regression 
+# lasso target: Fit lasso regression
 lasso: $(lasso_script) $(training) $(testing) $(scaled_credit)
 	Rscript $<
 
-# pcr target: Fit pcr regression 
+# pcr target: Fit pcr regression
 pcr: $(pcr_script) $(training) $(testing) $(scaled_credit)
 	Rscript $<
 
@@ -55,7 +55,7 @@ pls: $(pls_script) $(scaled_credit) $(training) $(testing)
 
 
 # regressions target: Run all 5 regressions
-regressions: 
+regressions:
 	make ols
 	make ridge
 	make lasso
@@ -67,7 +67,7 @@ tests: code/test-that.R code/tests/test-eda-function.R
 	Rscript $<
 
 # Data target
-data: 
+data:
 	cd data && curl -O http://www-bcf.usc.edu/~gareth/ISL/Credit.csv
 
 # Session target
@@ -77,3 +77,8 @@ session:
 # Clean target: Delete report.pdf
 clean:
 	rm -f report/report.pdf
+
+report: report/sections/*.Rmd
+	cat report/sections/*.Rmd > report/report.Rmd
+	cd report && Rscript -e "library(rmarkdown); render('report.Rmd', 'pdf_document')"
+
