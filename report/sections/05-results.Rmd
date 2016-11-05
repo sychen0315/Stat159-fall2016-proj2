@@ -1,0 +1,98 @@
+
+# Results
+
+## OLS Regression
+
+Below is the table for OLS regression summary. As we can see, certain coefficients comes with a relatively high p-value, like education and ethnicity which suggests that they may not be significant. Also, if we look at the absolute value of the estimated coefficients, we can see that income, limit and ratins dominate the change in reponse variable, which suggests that we should try principal components regression that will ignore trivial variables.
+
+```{r results= 'asis', echo = FALSE}
+library(xtable)
+library(Matrix)
+options(xtable.comment = FALSE,
+        xtable.table.placement = "H")
+load("../data/OLS/OLS-regression.RData")
+print(xtable(ols_reg_sum$coefficients, caption = 'OLS Coefficients',digits = c(0,5,5,5,5)), comment = FALSE)
+```
+
+
+## Ridge Regression
+
+```{r results= 'asis', echo = FALSE}
+
+load("../data/ridge/ridge-regression.RData")
+ridge_coef_matrix <- as.matrix(ridge_coef)
+colnames(ridge_coef_matrix) <- "Estimate"
+print(xtable(ridge_coef_matrix, caption = 'Ridge Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r ridge_bestlam`. The estimated coefficients are consistent with ones we get from OLS. Income, limit and ratings still dominate the change in reponse. Other trivial variabls, like cards and gender are given less influence because of introducing l2-norm in ridge regression.
+
+## Lasso Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/lasso/lasso-regression.RData")
+lasso_coef_matrix <- as.matrix(lasso_coef)
+colnames(lasso_coef_matrix) <- "Estimate"
+print(xtable(lasso_coef_matrix, caption = 'Lasso Coefficients', digits = c(0,5)), comment = FALSE)
+```
+
+The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r lasso_bestlam`. Comparing to the estimates in ridge regression, we can see that a lot of regressors are given 0 estimate, which greatly reduce the number of regressors. As discussed in the methods section, this is caused by the tendency lasso regression holds to prefer solutions with fewer paramters than ridge regression. Dominated variables are given much more power and trivial variables are given none power. Whether reducing the number of regressors is an improvement or not will be discussed when we compare all our 5 models.
+
+## Principal Components Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/pcr/pcr.RData")
+pcr_coef_matrix <- as.matrix(pcr_coef)
+colnames(pcr_coef_matrix) <- "Estimate"
+rownames(pcr_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pcr_coef_matrix, caption = 'PCR Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The best hyper-parameter for number of components we get is `r pcr_bestcomps` by cross validation. The range space for our hyper-parameter is 1 to 11 since we only have 11 variables. Reduce `r 11 - pcr_bestcomps` dimension is trivial. Hence, the results from PCR are similar to those of OLS. As we will see later, PCR does not improve MSE neither.
+
+## Partial Least Squares Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/pls/pls.RData")
+pls_coef_matrix <- as.matrix(pls_coef)
+colnames(pls_coef_matrix) <- "Estimate"
+rownames(pls_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pls_coef_matrix, caption = 'PLS Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The best hyper-parameter for number of components we get is `r pls_bestcomps` by cross validation. We can see some improvement, but `r pls_bestcomps` is still very close to 11, our original number of regressor.
+
+## Comparision of 5 models
+
+```{r results= 'asis', echo = FALSE}
+mse_matrix = as.matrix(c("ols" = ols_MSE, "ridge" = ridge_MSE, "lasso" = lasso_MSE, "pcr" = pcr_MSE, "plsr" = pls_MSE))
+colnames(mse_matrix) = "MSE"
+print(xtable(mse_matrix, caption = 'MSE of 5 Regression Methods', digits = 5), comment = FALSE)
+```
+
+As we can see in the table, our lasso model perform the best. PLSR improves a little bit than PCR but is still not good enough. Ridge regression's result is similar to OLS, which is consistent with what we dicussed above.
+
+Below is the table for coefficients for all 5 models, and trend lines for each of coefficient.
+
+```{r results= 'asis', echo = FALSE}
+coef_matrix = cbind(ols_coef, ridge_coef, lasso_coef, c(0,pcr_coef), c(0,pls_coef))
+colnames(coef_matrix) = c("ols", "ridge", "lasso", "pcr", "plsr")
+print(xtable(coef_matrix, caption = 'Estimated Coefficients of 5 Regression Methods', digits = c(0,5,5,5,5,5)), comment = FALSE)
+```
+
+```{r results= 'asis', echo = FALSE}
+plot(coef_matrix[,1], xlab = "Coefficients", ylab = "Value", main = "Trend Lines of Coefficients for Different Regression Models", col = "steelblue4")
+lines(coef_matrix[,1], col = "steelblue4")
+points(coef_matrix[,2],col= "tan2")
+lines(coef_matrix[,2],col = "tan2")
+points(coef_matrix[,3], col = "springgreen4")
+lines(coef_matrix[,3],col = "springgreen4")
+points(coef_matrix[,4], col = "yellow1")
+lines(coef_matrix[,4],col = "yellow1")
+points(coef_matrix[,5], col = "tomato4")
+lines(coef_matrix[,5],col = "tomato4")
+legend(9,1,c('OLS','Ridge','Lasso','PCR','PLSR'), lty = c(1,1,1,1,1), lwd = c(3,3,3,3,3), col = c("steelblue4","tan2","springgreen4","yellow1","tomato4"))
+```
+
+
+
