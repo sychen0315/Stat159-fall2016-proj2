@@ -81,7 +81,8 @@ print(xtable(coef_matrix, caption = 'Estimated Coefficients of 5 Regression Meth
 ```
 
 ```{r results= 'asis', echo = FALSE}
-plot(coef_matrix[,1], xlab = "Coefficients", ylab = "Value", main = "Trend Lines of Coefficients for Different Regression Models", col = "steelblue4")
+plot(coef_matrix[,1], xlab = "Coefficients", ylab = "Value", main = "Trend Lines of Coefficients for Different Regression Models", col = "steelblue4", xaxt = 'n')
+axis(1, at=seq(1, 12, by=1), labels = c("Intercept","Income","Limit","Rating","Cards","Age","Education","Gender","Student","Married", "Asian", "Caucasian"))
 lines(coef_matrix[,1], col = "steelblue4")
 points(coef_matrix[,2],col= "tan2")
 lines(coef_matrix[,2],col = "tan2")
