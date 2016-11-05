@@ -1,0 +1,173 @@
+---
+title: 'Stat159 Project 2'
+author: "Shuotong Wu, Siyu Chen"
+date: "11/4/2016"
+output: 
+  ioslides_presentation:
+    incremental: true
+---
+
+## Introduction
+
+- In this project, we will utilize the model selection method used in Chapter 6, Linear Model Selection and Regularization, from the book "An Introduction to Statistical Learning" by Gareth James, Deniela Witten, Trevor Hastie and Robert Tibshirani.
+
+- The following five models will be applied to our dataset: 
+     - Ordinary Least Squares
+     - Ridge regression
+     - Lasso regression
+     - Principal Components regression
+     - Partial Least Squares regression
+
+## Data
+
+- The dataset we use can be found [here](http://www-bcf.usc.edu/~gareth/ISL/Credit.csv).
+- 3:1 ratio train test split
+- Pre-modeling Data Processing:
+     - Dummy out categorical variables
+     - Mean centering and standardizing
+
+## Methods: Least Squares Method
+
+- OLS estimators minimizes residual sum of squares: $RSS = \sum_{i=1}^n(y_i - \beta_0 - \sum_{j=1}^p(\beta_{j}x_{ij}))^2$ where $\beta_i$ are coefficient estimates.
+- Results are set as standard. Add regression techiniques to improve the result.
+
+## Methods: Ridge Regression 
+
+- Ridge regression imposes a penalty on the size of coefficients on OLS.
+- Ridge regression minimizes $RSS + \lambda \sum bj^2$.
+- $\lambda$ is complexity parameter that controls the amount of shrinkage
+
+## Methods: Lasso Regression
+
+- Lasso regression estimates sparse coefficients.
+- l1 prior as regularizer
+- Lasso method minimize $RSS + \lambda \sum |{\beta_j}|$.
+- prefer solutions with fewer regressors.
+
+## Methods: Principal Components Regression
+
+- Principal Components Regression considers regresses based on a standard linear regression model, but uses PCA for estimating the unknown regression coefficients in the model.
+
+
+## Methods: Partial Least Squares Regression
+
+- Partial Least Squares finds a linear regression model by projecting y and x to a new space.
+- It outperforms standard regression when there are more variables than observations. 
+
+## Model Building and Analysis
+
+- 3:1 train test split
+- In training set, 10-fold cross validation to find good hyper parameters.
+- fit the model, calculate MSE on test set.
+- refit model on whole dataset.
+
+## Result: OLS
+
+```{r results= 'asis', echo = FALSE}
+library(xtable)
+library(Matrix)
+options(xtable.comment = FALSE,
+        xtable.table.placement = "H")
+load("../data/OLS/OLS-regression.RData")
+print(xtable(ols_reg_sum$coefficients, caption = 'OLS Coefficients',digits = c(0,5,5,5,5)), comment = FALSE, type = "html")
+```
+
+## Result: OLS
+
+- certain coefficients comes with a relatively high p-value
+- income, limit and ratins dominate the change in reponse variable
+
+## Result: Ridge Regression
+```{r results= 'asis', echo = FALSE}
+
+load("../data/ridge/ridge-regression.RData")
+ridge_coef_matrix <- as.matrix(ridge_coef)
+colnames(ridge_coef_matrix) <- "Estimate"
+print(xtable(ridge_coef_matrix, caption = 'Ridge Coefficients',digits = c(0,5)), comment = FALSE, type = "html")
+```
+
+## Result: Ridge Regression
+- The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r ridge_bestlam`. 
+- Trivial variables, like cards and gender are given less influence because of introducing l2-norm in ridge regression.
+
+## Result: Lasso Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/lasso/lasso-regression.RData")
+lasso_coef_matrix <- as.matrix(lasso_coef)
+colnames(lasso_coef_matrix) <- "Estimate"
+print(xtable(lasso_coef_matrix, caption = 'Lasso Coefficients', digits = c(0,5)), comment = FALSE, type = 'html')
+```
+
+## Result: Lasso Regression
+- The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r lasso_bestlam`. 
+- A lot of regressors are given 0 estimate, which greatly reduce the number of regressors.
+
+## Result: Principal Components Regression
+```{r results= 'asis', echo = FALSE}
+load("../data/pcr/pcr.RData")
+pcr_coef_matrix <- as.matrix(pcr_coef)
+colnames(pcr_coef_matrix) <- "Estimate"
+rownames(pcr_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pcr_coef_matrix, caption = 'PCR Coefficients',digits = c(0,5)), comment = FALSE, type = 'html')
+```
+
+## Result: Principal Components Regression
+- The best hyper-parameter for number of components we get is `r pcr_bestcomps` 
+- Reduce `r 11 - pcr_bestcomps` dimension is trivial.
+
+## Result: Partial Least Squares Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/pls/pls.RData")
+pls_coef_matrix <- as.matrix(pls_coef)
+colnames(pls_coef_matrix) <- "Estimate"
+rownames(pls_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pls_coef_matrix, caption = 'PLS Coefficients',digits = c(0,5)), comment = FALSE, type = "html")
+```
+
+## Result: Partial Least Squares Regression
+
+- The best hyper-parameter for number of components we get is `r pls_bestcomps` by cross validation. 
+- We can see some improvement, but `r pls_bestcomps` is still very close to 11, our original number of regressor.
+
+## Comparision of 5 models
+
+```{r results= 'asis', echo = FALSE}
+mse_matrix = as.matrix(c("ols" = ols_MSE, "ridge" = ridge_MSE, "lasso" = lasso_MSE, "pcr" = pcr_MSE, "plsr" = pls_MSE))
+colnames(mse_matrix) = "MSE"
+print(xtable(mse_matrix, caption = 'MSE of 5 Regression Methods', digits = 5), comment = FALSE, type = "html")
+```
+
+## Comparision of 5 models
+
+- lasso model perform the best. 
+- PLSR improves a little bit than PCR but is still not good enough. 
+- Ridge regression's result is similar to OLS, which is consistent with what we dicussed above.
+
+## coefficients trend line
+```{r results= 'asis', echo = FALSE}
+coef_matrix = cbind(ols_coef, ridge_coef, lasso_coef, c(0,pcr_coef), c(0,pls_coef))
+colnames(coef_matrix) = c("ols", "ridge", "lasso", "pcr", "plsr")
+plot(coef_matrix[,1], xlab = "Coefficients", ylab = "Value", main = "Trend Lines of Coefficients for Different Regression Models", col = "steelblue4", xaxt = 'n')
+axis(1, at=seq(1, 12, by=1), labels = c("Intercept","Income","Limit","Rating","Cards","Age","Education","Gender","Student","Married", "Asian", "Caucasian"))
+lines(coef_matrix[,1], col = "steelblue4")
+points(coef_matrix[,2],col= "tan2")
+lines(coef_matrix[,2],col = "tan2")
+points(coef_matrix[,3], col = "springgreen4")
+lines(coef_matrix[,3],col = "springgreen4")
+points(coef_matrix[,4], col = "yellow1")
+lines(coef_matrix[,4],col = "yellow1")
+points(coef_matrix[,5], col = "tomato4")
+lines(coef_matrix[,5],col = "tomato4")
+legend(9,1,c('OLS','Ridge','Lasso','PCR','PLSR'), lty = c(1,1,1,1,1), lwd = c(3,3,3,3,3), col = c("steelblue4","tan2","springgreen4","yellow1","tomato4"))
+```
+
+## Conclusions
+
+- When we look at the coefficients table for all our 5 models, it's clear that limit, rating, student are the dominating factors in all models. 
+- Lasso regression model give the least power to trival variables, which is 0 to reduce the number of regressors, among all models. And it performs the best. 
+- It suggests that those trival factors may not have a strong relationship with balance. 
+- Other than lasso, the rest 4 models performs similarly. Those regression techniques are not helpful for our dataset.
+
+## THE END
