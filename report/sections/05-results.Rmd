@@ -25,7 +25,7 @@ colnames(ridge_coef_matrix) <- "Estimate"
 print(xtable(ridge_coef_matrix, caption = 'Ridge Coefficients',digits = c(0,5)), comment = FALSE)
 ```
 
-The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r ridge_bestlam`. The estimated coefficients are consistent with ones we get from OLS. Income, limit and ratings still dominate the change in reponse. Other trivial variabls, like cards and gender are given less influence because of introducing l2-norm in ridge regression.
+The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r ridge_bestlam`. The estimated coefficients are consistent with ones we get from OLS. Income, limit and ratings still dominate the change in reponse. Other trivial variables, like cards and gender are given less influence because of introducing l2-norm in ridge regression.
 
 ## Lasso Regression
 
