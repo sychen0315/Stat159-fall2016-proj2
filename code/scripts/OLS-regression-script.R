@@ -16,9 +16,9 @@ ols_MSE <- mean((ols_pred - testing_set[12])^2)
 
 # Refit the model
 ols_reg_refit <- lm(Balance ~ . , data = scaled_credit)
-
+ols_coef <- coef(ols_reg_refit)
 # Save result
-save(ols_reg,ols_reg_sum,ols_MSE, ols_reg_refit,
+save(ols_reg,ols_reg_sum,ols_MSE, ols_reg_refit, ols_coef,
      file = "data/OLS/OLS-regression.RData")
 
 sink(file = "data/OLS/OLS-output.txt")
