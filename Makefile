@@ -14,10 +14,10 @@ lasso_script = code/scripts/lasso-regression-script.R
 pcr_script = code/scripts/pcr-script.R
 pls_script = code/scripts/pls-script.R
 
-.PHONY: eda data pmdp tts ols ridge lasso pls pcr session regressions report all tests clean
+.PHONY: eda data pmdp tts ols ridge lasso pls pcr session regressions report slides all tests clean
 
 # Default targets
-all: eda pmdp tts regressions tests report
+all: eda pmdp tts regressions tests report slides
 
 # Eda traget: Run eda script to calculate summary statistics
 eda: $(eda_script) $(eda_function) $(credit)
@@ -83,3 +83,6 @@ report: report/sections/*.Rmd
 	cat report/sections/*.Rmd > report/report.Rmd
 	cd report && Rscript -e "library(rmarkdown); render('report.Rmd', 'pdf_document')"
 
+# slides target: Generate slides
+slides:
+	Rscript -e "library(rmarkdown); render('slides/slides.Rmd', 'ioslides_presentation')"
