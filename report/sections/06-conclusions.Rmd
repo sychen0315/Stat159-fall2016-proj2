@@ -1,0 +1,4 @@
+
+# Conclusion
+
+When we look at the coefficients table for all our 5 models, it's clear that limit, rating, student are the dominating factors in all models. Lasso regression model give the least power to trival variables, which is 0 to reduce the number of regressors, among all models. And it performs the best. It suggests that those trival factors may not have a strong relationship with balance. Other than lasso, the rest 4 models performs similarly. Those regression techniques are not helpful for our dataset. With the smallest MSE, we at last choose our lasso regression model for this dataset.
