@@ -26,10 +26,10 @@ pls_MSE <- mean((pls_pred - testing_set$Balance)^2)
 # Refit the model
 pls_fit <- plsr(Balance ~ ., data = scaled_credit, ncomp = pls_bestcomps)
 summary(pls_fit)
-
+pls_coef <- coef(pls_fit)
 # Save output
 save(pls_cv_out, pls_bestcomps, pls_MSE,
-     pls_fit,
+     pls_fit, pls_coef, 
      file = "data/pls/pls.RData")
 
 sink(file = "data/pls/pls-output.txt")
