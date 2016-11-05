@@ -42,5 +42,12 @@ To reproduce this project:
 3. Run `make` in the terminal to regenerate all output files, graphs and report.
 4. We can also reproduce any part as you want by run `make SPECIFIC PART`. More detail about parts you can reproduce are included in `Makefile` as targets.
 
+## Acknowledgement
+Thanks for the intructions and examples in <a rel="book" href="http://www-bcf.usc.edu/%7Egareth/ISL/">An Introduction to Statistical Learning</a>.
+
 ## License
+### Media content
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.       
+
+### Code
+All code is licensed under <a rel="license" href="https://opensource.org/licenses/MIT">The MIT License</a>.   
