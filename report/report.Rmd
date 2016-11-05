@@ -1,0 +1,182 @@
+---
+title: "Project 2 Report"
+author: "Shuotong Wu, Siyu Chen"
+date: "11/03/2016"
+output: pdf_document
+header-includes:
+- \usepackage{float}
+---
+
+# Abstract
+
+In this project, we try out different muitiple regression models and find the best approach to fit the data by comparision.
+
+
+# Introduction
+
+In this project, we will utilize the model selection method used in Chapter 6, Linear Model Selection and Regularization, from the book "An Introduction to Statistical Learning" by Gareth James, Deniela Witten, Trevor Hastie and Robert Tibshirani.
+
+The following five models will be applied to our dataset: Ordinary Least Squares, Ridge regression, Lasso regression, Principal Components regression and Partial Least Squares regression.
+
+We will first split the data into training set and test set by 3:1 ratio. For each regression method, we then use a 10-fold cross validation in the training set trying to find "best" model by selecting the one with minimum cross validation errors. Once we get the model with optimal hyper-parameters for each regression method, we will apply them to test set and compare their MSE. Finally we will refit the best model on the full dataset and get our final parameter estimate.
+
+
+
+# Data
+
+The dataset we use can be found [here](http://www-bcf.usc.edu/~gareth/ISL/Credit.csv).
+
+We clean the data by turning categorical variables into dummies, mean centering and standardizing.
+
+We have 400 entries in total and use 3:1 ratio for train-test-split, which gets us a training set with 300 entries and test set with 100 entries.
+
+
+# Methods
+
+In this section, we will introduce the five linear regression method we use.
+
+### Ordinary Least Squares Regression Method
+
+OLS estimators is the most common regression method. OLS estimators minimizes residual sum of squares: $RSS = \sum_{i=1}^n(y_i - \beta_0 - \sum_{j=1}^p(\beta_{j}x_{ij}))^2$ where $\beta_i$ are coefficient estimates. The OLS estimator is optimal among linear unbiased estimators when the errors are homoscedastic and uncorrelated.
+
+### Ridge Regression
+
+Ridge regression imposes a penalty on the size of coefficients on OLS. Instead of minimizing RSS, Ridge regression minimizes $RSS + \lambda \sum bj^2$. This model solves a regression model where the loss function is the linear least squares function and regularization is given by the l2-norm. $\lambda$ is complexity parameter that controls the amount of shrinkage: the larger the value of $\lambda$, the greater the amount of shrinkage and thus the coefficients become more robust.
+
+### Lasso Regression
+
+Lasso regression estimates sparse coefficients. It contains a l1 prior as regularizer. Lasso method minimize $RSS + \lambda \sum |{\beta_j}|$. Compared to ridge regression, lasso regression has tendency to prefer solutions with fewer parameters values, efficiently reducing the number of variables upon which the solution is dependent.
+
+### Principal Components Regression
+
+Typically, Principal Components Regression considers regresses based on a standard linear regression model, but uses PCA for estimating the unknown regression coefficients in the model. We first perform PCA(privipal components analysis) and then use these components as the regressors to obtain coefficient estimates. PCR performs really well if major pricipal components are more determined in the relationship between x and y than trivial components.
+
+### Partial Least Squares
+
+Instead of finding hyperplanes of maximum variance between y and x in PCR, Partial Least Squares finds a linear regression model by projecting y and x to a new space. It outperforms standard regression when there are more variables than observations. And PLS finds the multidimensional direction in the X space that explains the maximum multidimensional variance direction in the Y space so that it tries to explain both y and x.
+
+# Analysis
+
+## Exploratory Data Analysis
+
+We first explore our data. We calcluated statistics and summaries for quantitative variables, like income, age, and ratings. We also made histograms and boxplots to get a better idea of how data is distributed. For the qualitative variables like gender, ethnicity, we have the table of frequency for each of them. We also generate barplot to futher illustrate the distribution. Correlation matrix for quantitative variables is calculated as well. To learn the relationship between balance and qualitative variables, we first conduct anova(Analysis of variance), and then make boxplots for each pair of them.
+
+## Pre-modeling Data Processing
+
+Once we get a rough idea of our original dataset, we decide to process our data before modeling. We dummy out categorical variables, center data around mean and standardize it. We export the processed data for use of modeling.
+
+## Regression Models
+
+As mentioned in the data section, we have 400 entries in total, and randomly select 300 entries as training set, the rest as test set. We conduct the following process to 5 different methods discussed in methods section. We first use a 10-fold cross validation to look for good hyper-parameters. Then we select the best hyper-parameter set by minimum cv error, and fit it to test set to calculate MSE. We also plot the cross-validation errors in terms of the tunning parameter to visualize which parameter gives the "best" model. We at last fit the best model we have to the whole dataset.
+
+For ordinary least squares linear model, we use lm(). The results is set as a standard.
+
+For ridge regression and lasso regression, we use library $glmnet$. For parameters of the regression function, we set alpha to 0 for ridge regression and alpha to 1 for lasso regression. Intercept and standardize are both set to false since data is already mean centered and standardized. Cross validation is done by using $cv.glmnet()$ function, which performs 10-fold cross validation by default. We select models by minimum lambda value and calculate mean squared error on test set.
+
+For principal components regression and partial least square regression, we use library $pls$, pcr() and plsr(). Cross validation is done by setting regression methods' parameter validation to "CV". We plot validation errors using method validationplot(val.type = "MSEP") and select the best model. Similarly as above, we calculate MSE on test set and refit model to the whole dataset.
+
+Then we compare the models we get from model building process, utilizing the tables, summaries and plots we saved. The result analysis detail is in the next section.
+
+
+# Results
+
+## OLS Regression
+
+Below is the table for OLS regression summary. As we can see, certain coefficients comes with a relatively high p-value, like education and ethnicity which suggests that they may not be significant. Also, if we look at the absolute value of the estimated coefficients, we can see that income, limit and ratins dominate the change in reponse variable, which suggests that we should try principal components regression that will ignore trivial variables.
+
+```{r results= 'asis', echo = FALSE}
+library(xtable)
+library(Matrix)
+options(xtable.comment = FALSE,
+        xtable.table.placement = "H")
+load("../data/OLS/OLS-regression.RData")
+print(xtable(ols_reg_sum$coefficients, caption = 'OLS Coefficients',digits = c(0,5,5,5,5)), comment = FALSE)
+```
+
+
+## Ridge Regression
+
+```{r results= 'asis', echo = FALSE}
+
+load("../data/ridge/ridge-regression.RData")
+ridge_coef_matrix <- as.matrix(ridge_coef)
+colnames(ridge_coef_matrix) <- "Estimate"
+print(xtable(ridge_coef_matrix, caption = 'Ridge Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r ridge_bestlam`. The estimated coefficients are consistent with ones we get from OLS. Income, limit and ratings still dominate the change in reponse. Other trivial variabls, like cards and gender are given less influence because of introducing l2-norm in ridge regression.
+
+## Lasso Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/lasso/lasso-regression.RData")
+lasso_coef_matrix <- as.matrix(lasso_coef)
+colnames(lasso_coef_matrix) <- "Estimate"
+print(xtable(lasso_coef_matrix, caption = 'Lasso Coefficients', digits = c(0,5)), comment = FALSE)
+```
+
+The hyper-parameter $\lambda$ we get from cross validation with minimum validation error is $\lambda$ = `r lasso_bestlam`. Comparing to the estimates in ridge regression, we can see that a lot of regressors are given 0 estimate, which greatly reduce the number of regressors. As discussed in the methods section, this is caused by the tendency lasso regression holds to prefer solutions with fewer paramters than ridge regression. Dominated variables are given much more power and trivial variables are given none power. Whether reducing the number of regressors is an improvement or not will be discussed when we compare all our 5 models.
+
+## Principal Components Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/pcr/pcr.RData")
+pcr_coef_matrix <- as.matrix(pcr_coef)
+colnames(pcr_coef_matrix) <- "Estimate"
+rownames(pcr_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pcr_coef_matrix, caption = 'PCR Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The best hyper-parameter for number of components we get is `r pcr_bestcomps` by cross validation. The range space for our hyper-parameter is 1 to 11 since we only have 11 variables. Reduce `r 11 - pcr_bestcomps` dimension is trivial. Hence, the results from PCR are similar to those of OLS. As we will see later, PCR does not improve MSE neither.
+
+## Partial Least Squares Regression
+
+```{r results= 'asis', echo = FALSE}
+load("../data/pls/pls.RData")
+pls_coef_matrix <- as.matrix(pls_coef)
+colnames(pls_coef_matrix) <- "Estimate"
+rownames(pls_coef_matrix) <- c("Income", "Limit", "Rating", "Cards", "Age", "Education", "GenderFemale", "StudentYes", "MarriedYes", "EthnicityAsian", "EthnicityCaucasian")
+print(xtable(pls_coef_matrix, caption = 'PLS Coefficients',digits = c(0,5)), comment = FALSE)
+```
+
+The best hyper-parameter for number of components we get is `r pls_bestcomps` by cross validation. We can see some improvement, but `r pls_bestcomps` is still very close to 11, our original number of regressor.
+
+## Comparision of 5 models
+
+```{r results= 'asis', echo = FALSE}
+mse_matrix = as.matrix(c("ols" = ols_MSE, "ridge" = ridge_MSE, "lasso" = lasso_MSE, "pcr" = pcr_MSE, "plsr" = pls_MSE))
+colnames(mse_matrix) = "MSE"
+print(xtable(mse_matrix, caption = 'MSE of 5 Regression Methods', digits = 5), comment = FALSE)
+```
+
+As we can see in the table, our lasso model perform the best. PLSR improves a little bit than PCR but is still not good enough. Ridge regression's result is similar to OLS, which is consistent with what we dicussed above.
+
+Below is the table for coefficients for all 5 models, and trend lines for each of coefficient.
+
+```{r results= 'asis', echo = FALSE}
+coef_matrix = cbind(ols_coef, ridge_coef, lasso_coef, c(0,pcr_coef), c(0,pls_coef))
+colnames(coef_matrix) = c("ols", "ridge", "lasso", "pcr", "plsr")
+print(xtable(coef_matrix, caption = 'Estimated Coefficients of 5 Regression Methods', digits = c(0,5,5,5,5,5)), comment = FALSE)
+```
+
+```{r results= 'asis', echo = FALSE}
+plot(coef_matrix[,1], xlab = "Coefficients", ylab = "Value", main = "Trend Lines of Coefficients for Different Regression Models", col = "steelblue4", xaxt = 'n')
+axis(1, at=seq(1, 12, by=1), labels = c("Intercept","Income","Limit","Rating","Cards","Age","Education","Gender","Student","Married", "Asian", "Caucasian"))
+lines(coef_matrix[,1], col = "steelblue4")
+points(coef_matrix[,2],col= "tan2")
+lines(coef_matrix[,2],col = "tan2")
+points(coef_matrix[,3], col = "springgreen4")
+lines(coef_matrix[,3],col = "springgreen4")
+points(coef_matrix[,4], col = "yellow1")
+lines(coef_matrix[,4],col = "yellow1")
+points(coef_matrix[,5], col = "tomato4")
+lines(coef_matrix[,5],col = "tomato4")
+legend(9,1,c('OLS','Ridge','Lasso','PCR','PLSR'), lty = c(1,1,1,1,1), lwd = c(3,3,3,3,3), col = c("steelblue4","tan2","springgreen4","yellow1","tomato4"))
+```
+
+
+
+
+# Conclusion
+
+When we look at the coefficients table for all our 5 models, it's clear that limit, rating, student are the dominating factors in all models. Lasso regression model give the least power to trival variables, which is 0 to reduce the number of regressors, among all models. And it performs the best. It suggests that those trival factors may not have a strong relationship with balance. Other than lasso, the rest 4 models performs similarly. Those regression techniques are not helpful for our dataset. With the smallest MSE, we at last choose our lasso regression model for this dataset.
